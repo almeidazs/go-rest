@@ -8,18 +8,21 @@ import (
 	"time"
 )
 
+// shouldRetry reports whether another retry attempt is allowed.
 func (r RetryOptions) shouldRetry(attempt int) bool {
 	return attempt < r.Max
 }
 
+// delay returns the backoff delay for a given attempt.
 func (r RetryOptions) delay(attempt int) time.Duration {
 	if r.Backoff != nil {
 		return r.Backoff(attempt)
 	}
-	
+
 	return DefaultBackoff(attempt)
 }
 
+// retryTimeout handles retry logic when a request times out.
 func (c *Client) retryTimeout(
 	method, route string,
 	query map[string]string,
@@ -32,9 +35,9 @@ func (c *Client) retryTimeout(
 	if !c.opts.Retry.shouldRetry(attempt) {
 		return zero, &HTTPError{
 			Message: "timeout after max retries",
-			Route: route,
-			Status: http.StatusServiceUnavailable,
-			Method: method,
+			Route:   route,
+			Status:  http.StatusServiceUnavailable,
+			Method:  method,
 		}
 	}
 
@@ -47,6 +50,7 @@ func (c *Client) retryTimeout(
 	return c.do(method, route, query, body, attempt+1)
 }
 
+// retryHTTP handles retry logic for HTTP error responses.
 func (c *Client) retryHTTP(
 	resp *http.Response,
 	method, route string,
@@ -63,16 +67,16 @@ func (c *Client) retryHTTP(
 		}
 
 		_ = json.NewDecoder(resp.Body).Decode(&errPayload)
-		
+
 		return zero, &errPayload.Error
 	}
 
 	if !c.opts.Retry.shouldRetry(attempt) {
 		return zero, &HTTPError{
 			Message: "max retries exceeded",
-			Route: route,
-			Status: resp.StatusCode,
-			Method: method,
+			Route:   route,
+			Status:  resp.StatusCode,
+			Method:  method,
 		}
 	}
 
@@ -89,6 +93,7 @@ func (c *Client) retryHTTP(
 	return c.do(method, route, query, body, attempt+1)
 }
 
+// newRequest builds an HTTP request with headers, body and context.
 func (c *Client) newRequest(
 	ctx context.Context,
 	method, route string,

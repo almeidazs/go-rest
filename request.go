@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-
+// do executes an HTTP request with retry and timeout handling.
 func (c *Client) do(
 	method string,
 	route string,
@@ -41,7 +41,7 @@ func (c *Client) do(
 	}
 
 	var payload struct {
-		Data  any                `json:"data"`
+		Data  any              `json:"data"`
 		Error *AbacatePayError `json:"error"`
 	}
 
@@ -56,23 +56,27 @@ func (c *Client) do(
 	return payload.Data, nil
 }
 
+// Get performs a GET request.
 func (c *Client) Get(route string, query map[string]string) (any, error) {
 	return c.do(http.MethodGet, route, query, nil, 0)
 }
 
+// Post performs a POST request.
 func (c *Client) Post(route string, body any) (any, error) {
 	return c.do(http.MethodPost, route, nil, body, 0)
 }
 
+// Put performs a PUT request.
 func (c *Client) Put(route string, body any) (any, error) {
 	return c.do(http.MethodPut, route, nil, body, 0)
 }
 
+// Patch performs a PATCH request.
 func (c *Client) Patch(route string, body any) (any, error) {
 	return c.do(http.MethodPatch, route, nil, body, 0)
 }
 
+// Delete performs a DELETE request.
 func (c *Client) Delete(route string) (any, error) {
 	return c.do(http.MethodDelete, route, nil, nil, 0)
 }
-
