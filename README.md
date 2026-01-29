@@ -41,7 +41,7 @@ export ABACATEPAY_SECRET=...
 
 ### Versão da API
 
-Por padrão, o SDK utiliza a versão v1 da API.
+Por padrão, o SDK utiliza a versão v2 da API.
 
 Você pode sobrescrever:
 
@@ -49,7 +49,7 @@ Você pode sobrescrever:
 
 ```go
 client := abacatepay.New(abacatepay.Options{
-	Version: 2,
+	Version: 1,
 })
 ```
 

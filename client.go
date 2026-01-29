@@ -21,7 +21,7 @@ func New(opts Options) *Client {
 	}
 
 	if opts.Version == 0 {
-		opts.Version = 1
+		opts.Version = 2
 	}
 
 	if opts.Retry.Max == 0 {

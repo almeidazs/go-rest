@@ -20,7 +20,7 @@ type Options struct {
 	// BaseURL overrides the default API base URL.
 	BaseURL string
 
-	// Version specifies the API version (default: 1).
+	// Version specifies the API version (default: 2).
 	Version int
 
 	// Secret is the AbacatePay API secret.
