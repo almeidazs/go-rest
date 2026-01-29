@@ -1,3 +1,3 @@
-module github.com.almeidazs/go-rest
+module github.com.AbacatePay/go-rest
 
 go 1.22.2
